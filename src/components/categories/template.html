@@ -1,0 +1,55 @@
+<div class="categorys">
+  <el-button type="success" @click="cateToggle" plain>添加分类</el-button>
+  <!-- //表格 -->
+  <el-table :data="categoriesData" stripe style="width: 100%" v-loading="isLoading">
+    <!-- 导入的第三方插件  用于展示几级列表用 -->
+    <!-- file-icon="icon icon-file" 文件图标-->
+    <!-- folder-icon="icon icon-folder" 文件夹图标 -->
+    <!-- tree-key 区分其他菜单  不添加导致所有都展开 -->
+    <!-- level-key 设置菜单级别  以缩进形式表示子菜单 -->
+    <!-- parent-key 表示父级菜单ID缩进 -->
+    <!-- :indent-size 表示缩进多少 -->
+    <el-table-tree-column :indent-size="30" parent-key="cat_pid" level-key="cat_level" tree-key="cat_id" prop="cat_name" label="分类名称"
+      width="180"></el-table-tree-column>
+    <!-- 导入的第三方插件  用于展示几级列表用 -->
+    <!-- <el-table-column prop="cat_name" label="分类名称" width="180">
+    </el-table-column> -->
+    <el-table-column prop="cat_deleted" label="是否有效" width="180">
+      <template slot-scope="scope">
+        <span v-if="scope.row.cat_deleted">是</span>
+        <span v-else>否</span>
+      </template>
+    </el-table-column>
+    <el-table-column prop="cat_level" label="层级" width="180">
+    </el-table-column>
+    <el-table-column label="操作">
+      <template slot-scope="scope">
+        <!-- //修改 -->
+        <el-button icon="el-icon-edit" size="mini" type="primary" plain></el-button>
+        <!-- //删除 -->
+        <el-button icon="el-icon-delete" size="mini" type="danger" plain></el-button>
+      </template>
+    </el-table-column>
+  </el-table>
+
+  <!-- 分页 -->
+  <el-pagination background :current-page="pagenum" :page-size="pagesize" layout="prev, pager, next" @current-change="cateCur"
+    :total="total">
+  </el-pagination>
+
+  <!-- 弹框 -->
+  <el-dialog title="收货地址" :visible.sync="dialogFormCate">
+    <el-form :model="cateAddForm" label-width="100px">
+      <el-form-item label="活动名称">
+        <el-input v-model="cateAddForm.cat_name" autocomplete="off"></el-input>
+      </el-form-item>
+      <el-form-item label="活动区域">
+        <el-cascader v-model="cateAddForm.catIds" :options="cateAddList" :props="propObj" change-on-select></el-cascader>
+      </el-form-item>
+    </el-form>
+    <div slot="footer" class="dialog-footer">
+      <el-button @click="dialogFormCate = false">取 消</el-button>
+      <el-button type="primary" @click="addCate">确 定</el-button>
+    </div>
+  </el-dialog>
+</div>

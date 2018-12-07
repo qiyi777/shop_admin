@@ -42,39 +42,40 @@ export default {
     }
   },
   methods: {
-    submitForm (formName) {
-      this.$refs.ruleForm.validate(valid => {
+    async submitForm (formName) {
+      try {
+        await this.$refs.ruleForm.validate()
         // 表示验证不成功
-        if (!valid) {
-          return false
-        }
         // 校验成功  发送请求到登录接口  完成登录
-        axios
-          .post('http://localhost:8888/api/private/v1/login', this.loginForm)
-          .then(res => {
-            // console.log(res)
-            if (res.data.meta.status === 200) {
-              // 说明登录成功了 页面重定向到首页 同时保存localstorage
-              localStorage.setItem('token', res.data.data.token)
-              this.$router.push('/home')
-              // 提示到了首页
-              this.$message({
-                // 显示的提示信息
-                message: res.data.meta.msg,
-                type: 'success', // 主题
-                // 显示的秒数
-                duration: 1000
-              })
-            } else {
-              // 登录失败
-              this.$message({
-                message: res.data.meta.msg,
-                type: 'warning',
-                duration: 1000
-              })
-            }
+        const res = await axios.post(
+          'http://localhost:8888/api/private/v1/login',
+          this.loginForm
+        )
+
+        // console.log(res)
+        if (res.data.meta.status === 200) {
+          // 说明登录成功了 页面重定向到首页 同时保存localstorage
+          localStorage.setItem('token', res.data.data.token)
+          this.$router.push('/home')
+          // 提示到了首页
+          this.$message({
+            // 显示的提示信息
+            message: res.data.meta.msg,
+            type: 'success', // 主题
+            // 显示的秒数
+            duration: 1000
           })
-      })
+        } else {
+          // 登录失败
+          this.$message({
+            message: res.data.meta.msg,
+            type: 'warning',
+            duration: 1000
+          })
+        }
+      } catch (e) {
+        // 校验失败不作任何处理
+      }
     },
     // 重置表单
     resetForm (formName) {

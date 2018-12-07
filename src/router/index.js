@@ -9,7 +9,15 @@ import Home from '@/components/home/Home'
 import '@/assets/css/index.css'
 // 导入组件users
 import Users from '@/components/users/Users'
+// 导入rights组件
+import Rights from '@/components/rights/Rights'
+// 导入Roles组件
+import Roles from '@/components/roles/Roles.vue'
+// 导入goods组件
+import Goods from '@/components/Goods/Goods.vue'
 // 将路由经过use注册到Vue中
+// 导入组件category
+import Categories from '@/components/categories/Categories'
 Vue.use(Router)
 
 const router = new Router({
@@ -18,7 +26,13 @@ const router = new Router({
     {
       path: '/home',
       component: Home,
-      children: [{ path: '/users', component: Users }]
+      children: [
+        { path: '/users', component: Users },
+        { path: '/rights', component: Rights },
+        { path: '/roles', component: Roles },
+        { path: '/categories', component: Categories },
+        { path: '/goods', component: Goods }
+      ]
     }
   ]
 })

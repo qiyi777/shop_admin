@@ -24,61 +24,18 @@
     </el-header>
     <el-container class="home-container">
       <el-aside width="200px">
-        <el-menu :router="true" default-active="2" class="el-menu-vertical-demo" background-color="#545c64" text-color="#fff" active-text-color="#ffd04b">
-          <el-submenu index="1">
+        <el-menu :router="true" default-active="2" class="el-menu-vertical-demo" background-color="#545c64" text-color="#fff" active-text-color="#ffd04b" :unique-opened="true">
+          <!-- 一级菜单 -->
+          <el-submenu :index="item.id + ''" v-for="item in homeMenu" :key="item.id">
             <template slot="title">
               <i class="el-icon-location"></i>
-              <span>用户管理</span>
+              <span>{{ item.authName }}</span>
             </template>
-            <el-menu-item index="/users">
+            <!-- 二级菜单 -->
+            <el-menu-item :index="item2.path" v-for="item2 in item.children" :key="item2.id">
               <i class="el-icon-menu"></i>
-              用户列表
+              <span slot="title">{{ item2.authName }}</span>
             </el-menu-item>
-          </el-submenu>
-          <el-submenu index="2">
-            <template slot="title">
-              <i class="el-icon-location"></i>
-              <span>权限管理</span>
-            </template>
-            <el-menu-item index="2-1">
-              <i class="el-icon-menu"></i>
-              角色列表</el-menu-item>
-            <el-menu-item index="2-2">
-              <i class="el-icon-menu"></i>
-              权限列表</el-menu-item>
-          </el-submenu>
-          <el-submenu index="3">
-            <template slot="title">
-              <i class="el-icon-location"></i>
-              <span>商品管理</span>
-            </template>
-            <el-menu-item index="3-1">
-              <i class="el-icon-menu"></i>
-              商品列表</el-menu-item>
-            <el-menu-item index="3-2">
-              <i class="el-icon-menu"></i>
-              分类参数</el-menu-item>
-            <el-menu-item index="3-3">
-              <i class="el-icon-menu"></i>
-              商品分类</el-menu-item>
-          </el-submenu>
-          <el-submenu index="4">
-            <template slot="title">
-              <i class="el-icon-location"></i>
-              <span>订单管理</span>
-            </template>
-            <el-menu-item index="2-1">
-              <i class="el-icon-menu"></i>
-              订单列表</el-menu-item>
-          </el-submenu>
-          <el-submenu index="5">
-            <template slot="title">
-              <i class="el-icon-location"></i>
-              <span>数据统计</span>
-            </template>
-            <el-menu-item index="2-1">
-              <i class="el-icon-menu"></i>
-              数据统计</el-menu-item>
           </el-submenu>
         </el-menu>
       </el-aside>
@@ -92,7 +49,21 @@
 
 <script>
 export default {
+  data () {
+    return {
+      homeMenu: [],
+      menus: []
+    }
+  },
+  created () {
+    this.getMenus()
+  },
   methods: {
+    // 菜单权限
+    async getMenus () {
+      const res = await this.$http.get('/menus')
+      this.homeMenu = res.data.data
+    },
     withdraw () {
       this.$confirm('您即将退出登录, 是否继续?', '提示', {
         confirmButtonText: '确定',
