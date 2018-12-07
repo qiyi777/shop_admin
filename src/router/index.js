@@ -15,6 +15,8 @@ import Rights from '@/components/rights/Rights'
 import Roles from '@/components/roles/Roles.vue'
 // 导入goods组件
 import Goods from '@/components/Goods/Goods.vue'
+// 导入goods-add组件
+import GoodsAdd from '@/components/goods-add/GoodsAdd.vue'
 // 将路由经过use注册到Vue中
 // 导入组件category
 import Categories from '@/components/categories/Categories'
@@ -31,7 +33,8 @@ const router = new Router({
         { path: '/rights', component: Rights },
         { path: '/roles', component: Roles },
         { path: '/categories', component: Categories },
-        { path: '/goods', component: Goods }
+        { path: '/goods/:page?', component: Goods },
+        { path: '/goods-add', component: GoodsAdd }
       ]
     }
   ]
