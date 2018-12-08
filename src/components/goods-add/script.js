@@ -1,4 +1,17 @@
+// import VueQuillEditor from 'vue-quill-editor'
+
+// 引入vue-quill-editor样式
+import 'quill/dist/quill.core.css'
+import 'quill/dist/quill.snow.css'
+import 'quill/dist/quill.bubble.css'
+
+import { quillEditor } from 'vue-quill-editor'
+
 export default {
+  // vue-quill-editor注册局部组件
+  components: {
+    quillEditor
+  },
   // 页面渲染就获取商品所有信息
   created () {
     // 渲染级联选择中的商品列表数据
@@ -28,7 +41,9 @@ export default {
         // 级联选择器商品分类信息展示
         GoodsAddOptions: [],
         // 图片上传的地址数组
-        pics: []
+        pics: [],
+        // 富文本数据
+        goods_introduce: ''
       },
       // 图片上传需要一个请求token
       headers: {
@@ -49,7 +64,6 @@ export default {
     },
     // 让步骤条和tab栏同步
     tabPane (tab) {
-      // console.log(tab)
       this.stap = tab.index - 0
     },
 
@@ -71,8 +85,42 @@ export default {
       this.goodsAddForm.pics.push({
         pic: response.data.tmp_path
       })
-
-      // console.log()
+    },
+    // 添加商品发送ajax请求
+    async addCommodity () {
+      // 让 eslint 不再使用 camelcase 校验下一行代码：
+      /* eslint-disable camelcase */
+      const {
+        goods_name,
+        goods_price,
+        goods_weight,
+        goods_number,
+        is_promote,
+        goods_cat_arr,
+        pics,
+        goods_introduce
+      } = this.goodsAddForm
+      const res = await this.$http.post('/goods', {
+        goods_name,
+        goods_price,
+        goods_weight,
+        goods_number,
+        is_promote,
+        goods_cat: goods_cat_arr.join(','),
+        pics,
+        goods_introduce,
+        attrs: []
+      })
+      // console.log(res)
+      // 提示创建成功
+      if (res.data.meta.status === 200) {
+        this.$message({
+          type: 'success',
+          message: this.data.meta.msg
+        })
+      }
+      // 跳转到商品列表页
+      this.$router.push('/goods')
     }
   }
 }

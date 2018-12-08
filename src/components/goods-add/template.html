@@ -52,7 +52,9 @@
       <el-button type="primary" @click="nextTab(2,'third')">下一步</el-button>
     </el-tab-pane>
     <el-tab-pane name="third" label="商品内容">
-      <el-button type="primary">确定</el-button>
+      <!-- 富文本编辑 -->
+      <quill-editor v-model="goodsAddForm.goods_introduce"></quill-editor>
+      <el-button type="primary" @click="addCommodity">确定</el-button>
     </el-tab-pane>
   </el-tabs>
 
