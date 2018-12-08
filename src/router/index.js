@@ -2,6 +2,8 @@
 import Vue from 'vue'
 // 导入路由
 import Router from 'vue-router'
+// 可以对组件进行按需加载
+
 // 导入创建好的单文件组件
 import Login from '@/components/login/Login'
 import Home from '@/components/home/Home'
@@ -20,6 +22,8 @@ import GoodsAdd from '@/components/goods-add/GoodsAdd.vue'
 // 将路由经过use注册到Vue中
 // 导入组件category
 import Categories from '@/components/categories/Categories'
+// 导入当输入错误跳转页面的组件
+import Notfound from '@/components/notfond/Notfound'
 Vue.use(Router)
 
 const router = new Router({
@@ -36,7 +40,9 @@ const router = new Router({
         { path: '/goods/:page?', component: Goods },
         { path: '/goods-add', component: GoodsAdd }
       ]
-    }
+    },
+    // 当输入的页面不存在 处理
+    { path: '*', component: Notfound }
   ]
 })
 
